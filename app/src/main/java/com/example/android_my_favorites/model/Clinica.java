@@ -33,10 +33,10 @@ public class Clinica {
     private String segmento;
     private String beneficios;
     private String total_likes;
-
+    private Boolean favorite;
 
     public Clinica() {
-
+        this.favorite = false;
     }
 
     @Override
@@ -241,4 +241,17 @@ public class Clinica {
     public void setTotal_likes(String total_likes) {
         this.total_likes = total_likes;
     }
+
+    public Boolean getFavorite() {
+        return this.favorite;
+    }
+
+    public void setFavorite() {
+        setFavorite(false);
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = !this.favorite;
+    }
+
 }

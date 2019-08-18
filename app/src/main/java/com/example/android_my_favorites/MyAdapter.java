@@ -2,9 +2,12 @@ package com.example.android_my_favorites;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +23,7 @@ public class MyAdapter extends BaseAdapter {
 
     private List<Clinica> listClinicas;
     private Activity activity;
-
+    final private String TAG = "MyAdapter";
 
     MyAdapter(List<Clinica> list, Activity act){
         this.listClinicas = list;
@@ -46,16 +49,31 @@ public class MyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         @SuppressLint("ViewHolder") View view = activity.getLayoutInflater().inflate(R.layout.clinica_layout, parent, false);
 
-        Clinica clinica = (Clinica) getItem(position);
+        // Recuperando a clinica e setando o nome fantasia no layout
+        final Clinica clinica = (Clinica) getItem(position);
         TextView tvNomeFantasia = view.findViewById(R.id.tv_clinica);
         tvNomeFantasia.setText(clinica.getNome_fantasia());
 
+        // Imagem logo da clinica
         ImageView imageView = view.findViewById(R.id.iv_clinica);
-
         URL urlPhoto = NetworkUtil.buildUrlPhoto(clinica.getUniq_id(), clinica.getFoto());
         Picasso.with(view.getContext())
                 .load(String.valueOf(urlPhoto))
                 .into(imageView);
+
+        // Botão para favoritar a clinica
+        final ImageButton ibStar = view.findViewById(R.id.ib_star);
+        ibStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clinica.getFavorite()){
+                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_empty));
+                }else{
+                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
+                }
+                clinica.setFavorite();
+            }
+        });
 
         return view;
     }

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         tvHello = findViewById(R.id.tv_hello);
         lvClinicas = findViewById(R.id.lv_clinicas);
         pbLoading = findViewById(R.id.pb_loading);
-        new BancoAsyncTask(this).execute();
+        //new BancoAsyncTask(this).execute();
     }
 
     @Override
@@ -93,10 +95,8 @@ public class MainActivity extends AppCompatActivity {
         protected List<Clinica> doInBackground(URL... urls) {
             Object json="";
             URL url = urls[0];
-            Log.d(TAG, "URL utilizada: " + url.toString());
             try {
                 json = NetworkUtil.getResponseFromHttpUrl(url);
-                Log.d(TAG, "AsyncTask retornou: " + json);
             } catch (IOException e) {
                 e.printStackTrace();
             }

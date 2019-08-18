@@ -7,4 +7,5 @@
     <string name="nome_fantasia">Nome Fantasia</string>
     <string name="logo">Logo</string>
     <string name="not_found">Nada encontrado.</string>
+    <string name="favorite">Favoritar</string>
 </resources>
