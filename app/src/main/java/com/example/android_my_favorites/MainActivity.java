@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android_my_favorites.model.Clinica;
@@ -22,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     TextView tvHello;
+    ListView lvClinicas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tvHello = findViewById(R.id.tv_hello);
+        lvClinicas = findViewById(R.id.lv_clinicas);
     }
 
     @Override
@@ -55,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
         task.execute(url);
     }
 
+    public ListView listaClinicas (List<Clinica> clinica) {
+        MyAdapter adapter = new MyAdapter(clinica, this);
+        lvClinicas.setAdapter(adapter);
+        return lvClinicas;
+    }
+
     class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
@@ -70,19 +79,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             TypeToken<List<Clinica>> token = new TypeToken<List<Clinica>>() {};
-            if (json == ""){
-                List<Clinica> clinicas = null;
-                return clinicas;
-            } else {
-                return new Gson().fromJson(json.toString(), token.getType());
+
+            if (json==null) {
+                throw new AssertionError("Object cannot be null");
             }
+            return new Gson().fromJson(json.toString(), token.getType());
         }
 
         @Override
         protected void onPostExecute(List<Clinica> clinicas){
-            tvHello.setText("");
-            for (int i = 0; i < clinicas.size(); i++) {
-                tvHello.setText(tvHello.getText() + clinicas.get(i).getRazao_social());
+            if (clinicas == null) {
+                tvHello.setText(R.string.not_found);
+            } else {
+                tvHello.setText(null);
+                listaClinicas(clinicas);
             }
         }
     }

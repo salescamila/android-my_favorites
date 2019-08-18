@@ -17,8 +17,8 @@ public class NetworkUtil {
     private static final String LINK_CLINICAS = "https://pouppe.websiteseguro.com/sistema/v2/api/credenciadas";
     private static final String LINK_PHOTO = "https://pouppe.websiteseguro.com/evosaude/sistema/fotos/";
 
-    public static URL buildUrlPhoto(String photo) {
-        Uri buildUri = Uri.parse(LINK_PHOTO + photo).buildUpon().build();
+    public static URL buildUrlPhoto(String id, String photo) {
+        Uri buildUri = Uri.parse(LINK_PHOTO + id + '/' + photo).buildUpon().build();
         URL url =  null;
         try{
             url = new URL(buildUri.toString());
