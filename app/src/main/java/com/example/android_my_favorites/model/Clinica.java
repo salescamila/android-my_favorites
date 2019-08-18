@@ -41,14 +41,10 @@ public class Clinica {
 
     @Override
     public String toString() {
-        return "Credenciadas{" +
-                "descricao='" + descricao + '\'' +
+        return "Clinicas{" +
                 ", id='" + id + '\'' +
-                ", id_estabelecimento='" + id_estabelecimento + '\'' +
-                ", razao_social='" + razao_social + '\'' +
                 ", nome_fantasia='" + nome_fantasia + '\'' +
-                ", contato='" + contato + '\'' +
-                ", telefone='" + telefone + '\'' +
+                ", razao_social='" + razao_social + '\'' +
                 '}';
     }
 
@@ -120,9 +116,7 @@ public class Clinica {
         this.contato = contato;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
+    public String getTelefone() { return telefone; }
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
