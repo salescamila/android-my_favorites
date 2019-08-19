@@ -43,8 +43,9 @@ public class Clinica {
     public String toString() {
         return "Clinicas{" +
                 ", id='" + id + '\'' +
+                ", uniq_id='" + uniq_id + '\'' +
                 ", nome_fantasia='" + nome_fantasia + '\'' +
-                ", razao_social='" + razao_social + '\'' +
+                ", favorita='" + favorite + '\'' +
                 '}';
     }
 

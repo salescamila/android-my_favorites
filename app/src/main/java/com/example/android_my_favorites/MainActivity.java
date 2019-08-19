@@ -1,5 +1,6 @@
 package com.example.android_my_favorites;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -83,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
         pbLoading.setVisibility(View.GONE);
     }
 
+    public void setFavorite(Clinica clinica){
+
+    }
+
     class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+/*
     class BancoAsyncTask extends AsyncTask<Void, Void, Void>{
         Context context;
 
@@ -141,6 +146,41 @@ public class MainActivity extends AppCompatActivity {
             }
 
             return null;
+        }
+    }*/
+
+    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Boolean> {
+        @SuppressLint("StaticFieldLeak")
+        Context context;
+
+        SetFavoriteAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Boolean doInBackground(Clinica... clinicas){
+            Clinica clinica = clinicas[0];
+            if (clinica.getFavorite()){
+                ClinicaDataBase.getInstance(context).getDao().insert(clinica);
+            } else {
+                List<Clinica> cli = ClinicaDataBase.getInstance(context).getDao().getClinica(clinica.getUniq_id());
+                for(Clinica c : cli) {
+                    ClinicaDataBase.getInstance(context).getDao().delete(c);
+                }
+            }
+
+            List<Clinica> clinis = ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
+            for(Clinica c : clinis){
+                Log.d(TAG, "-->"+ c.toString());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+
+            super.onPostExecute(aBoolean);
         }
     }
 

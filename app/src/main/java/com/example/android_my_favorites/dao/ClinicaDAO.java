@@ -17,6 +17,9 @@ public interface ClinicaDAO {
     @Query("SELECT * FROM clinica")
     List<Clinica> getAllClinicas();
 
+    @Query("SELECT * FROM clinica WHERE uniq_id = :uniq_id")
+    List<Clinica> getClinica(String uniq_id);
+
     @Insert
     void insert (Clinica clinicas);
 

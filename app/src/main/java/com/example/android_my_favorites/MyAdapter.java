@@ -2,6 +2,8 @@ package com.example.android_my_favorites;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android_my_favorites.dao.ClinicaDataBase;
 import com.example.android_my_favorites.model.Clinica;
 import com.squareup.picasso.Picasso;
 
@@ -72,6 +75,7 @@ public class MyAdapter extends BaseAdapter {
                     ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
                 }
                 clinica.setFavorite();
+                new MainActivity.SetFavoriteAsyncTask(view.getContext()).execute(clinica);
             }
         });
 
