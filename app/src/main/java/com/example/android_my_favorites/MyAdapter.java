@@ -61,7 +61,6 @@ public class MyAdapter extends BaseAdapter {
         TextView tvNomeFantasia = view.findViewById(R.id.tv_clinica);
         tvNomeFantasia.setText(clinica.getNome_fantasia());
 
-
         // Imagem logo da clinica
         ImageView imageView = view.findViewById(R.id.iv_clinica);
         URL urlPhoto = NetworkUtil.buildUrlPhoto(clinica.getUniq_id(), clinica.getFoto());
@@ -69,13 +68,16 @@ public class MyAdapter extends BaseAdapter {
                 .load(String.valueOf(urlPhoto))
                 .into(imageView);
 
+        // Verifica se Clinica é favorita e marca estrela
+        new MainActivity.GetClinicAsyncTask(view.getContext(), position).execute(clinica.getUniq_id());
+
         // Botão para favoritar a clinica
         final ImageButton ibStar = view.findViewById(R.id.ib_star);
-        Log.d(TAG, "web favorite..."+clinica.getFavorite());
         if (clinica.getFavorite()){
             ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
         }
 
+        // Evento para setar Clinica Favorita
         ibStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

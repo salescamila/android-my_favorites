@@ -3,6 +3,7 @@ package com.example.android_my_favorites;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,8 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainCAMILA";
     TextView tvHello;
-    ListView lvClinicas;
+    @SuppressLint("StaticFieldLeak")
+    static ListView lvClinicas;
     ProgressBar pbLoading;
+    ImageButton ibStar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void listAllClinics(){
         URL url = NetworkUtil.buildUrlClinicas();
-        MyAsyncTask task = new MyAsyncTask();
+        CallWebAsyncTask task = new CallWebAsyncTask();
         task.execute(url);
     }
 
     public void listAllFavoritesClinics(){
-        GetFavoritesAsyncTask task = new GetFavoritesAsyncTask(this);
+        GetAllFavoritesAsyncTask task = new GetAllFavoritesAsyncTask(this);
         task.execute();
     }
 
@@ -99,11 +101,20 @@ public class MainActivity extends AppCompatActivity {
         pbLoading.setVisibility(View.GONE);
     }
 
-    public void setFavorite(Clinica clinica){
-
+    public static void setFavorite(Integer position){
+        Clinica cli = (Clinica) lvClinicas.getAdapter().getItem(position);
+        View view = lvClinicas.getChildAt(position);
+        if(view != null) {
+            TextView tv = view.findViewById(R.id.tv_clinica);
+            if (cli.getNome_fantasia().equals(tv.getText().toString())) {
+                cli.setFav(true);
+                ((ImageButton) view.findViewById(R.id.ib_star)).setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_star_full));
+            }
+        }
     }
 
-    class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
+    @SuppressLint("StaticFieldLeak")
+    class CallWebAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
         protected void onPreExecute() {
@@ -163,10 +174,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class GetFavoritesAsyncTask extends AsyncTask<Void, Void, List<Clinica>>{
+    @SuppressLint("StaticFieldLeak")
+    class GetAllFavoritesAsyncTask extends AsyncTask<Void, Void, List<Clinica>>{
         Context context;
 
-        GetFavoritesAsyncTask(Context context){
+        GetAllFavoritesAsyncTask(Context context){
             this.context = context;
         }
 
@@ -185,6 +197,30 @@ public class MainActivity extends AppCompatActivity {
                 listaClinicas(clinicas);
             }
 
+            super.onPostExecute(clinicas);
+        }
+    }
+
+    static class GetClinicAsyncTask extends AsyncTask<String, Void, List<Clinica>>{
+        @SuppressLint("StaticFieldLeak")
+        Context context;
+        Integer position;
+
+        GetClinicAsyncTask(Context context, Integer position){
+            this.context = context;
+            this.position = position;
+        }
+
+        @Override
+        protected List<Clinica> doInBackground(String... strings) {
+            return ClinicaDataBase.getInstance(this.context).getDao().getClinica(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<Clinica> clinicas) {
+            if (clinicas.size() > 0){
+                setFavorite(this.position);
+            }
             super.onPostExecute(clinicas);
         }
     }

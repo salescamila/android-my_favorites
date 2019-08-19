@@ -4,8 +4,6 @@ package com.example.android_my_favorites.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.example.android_my_favorites.MainActivity;
-
 @Entity
 public class Clinica {
 
@@ -255,6 +253,10 @@ public class Clinica {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = !this.favorite;
+    }
+
+    public void setFav(Boolean fav){
+        this.favorite = true;
     }
 
 }
