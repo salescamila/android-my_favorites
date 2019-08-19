@@ -33,6 +33,10 @@ public class MyAdapter extends BaseAdapter {
         this.activity = act;
     }
 
+    public void clearList(){
+        this.listClinicas.clear();
+    }
+
     @Override
     public int getCount() {
         return listClinicas.size();
@@ -57,6 +61,7 @@ public class MyAdapter extends BaseAdapter {
         TextView tvNomeFantasia = view.findViewById(R.id.tv_clinica);
         tvNomeFantasia.setText(clinica.getNome_fantasia());
 
+
         // Imagem logo da clinica
         ImageView imageView = view.findViewById(R.id.iv_clinica);
         URL urlPhoto = NetworkUtil.buildUrlPhoto(clinica.getUniq_id(), clinica.getFoto());
@@ -66,15 +71,21 @@ public class MyAdapter extends BaseAdapter {
 
         // Botão para favoritar a clinica
         final ImageButton ibStar = view.findViewById(R.id.ib_star);
+        Log.d(TAG, "web favorite..."+clinica.getFavorite());
+        if (clinica.getFavorite()){
+            ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
+        }
+
         ibStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (clinica.getFavorite()){
-                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_empty));
-                }else{
-                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
-                }
                 clinica.setFavorite();
+                Log.d(TAG, "click favorite..."+clinica.getFavorite());
+                if (clinica.getFavorite()){
+                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
+                }else{
+                    ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_empty));
+                }
                 new MainActivity.SetFavoriteAsyncTask(view.getContext()).execute(clinica);
             }
         });

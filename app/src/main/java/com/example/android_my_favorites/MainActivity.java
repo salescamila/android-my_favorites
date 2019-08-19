@@ -28,7 +28,7 @@ import util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainCAMILA";
     TextView tvHello;
     ListView lvClinicas;
     ProgressBar pbLoading;
@@ -37,10 +37,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvHello = findViewById(R.id.tv_hello);
-        lvClinicas = findViewById(R.id.lv_clinicas);
-        pbLoading = findViewById(R.id.pb_loading);
-        //new BancoAsyncTask(this).execute();
+        if(tvHello == null) {
+            tvHello = findViewById(R.id.tv_hello);
+        }
+        if (lvClinicas == null) {
+            lvClinicas = findViewById(R.id.lv_clinicas);
+        }
+        if(pbLoading == null) {
+            pbLoading = findViewById(R.id.pb_loading);
+        }
     }
 
     @Override
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 listAllClinics();
                 break;
             case R.id.menu_favorites:
-                //list favorites
+                listAllFavoritesClinics();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -68,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
         task.execute(url);
     }
 
+    public void listAllFavoritesClinics(){
+        GetFavoritesAsyncTask task = new GetFavoritesAsyncTask(this);
+        task.execute();
+    }
+
     public ListView listaClinicas (List<Clinica> clinica) {
         MyAdapter adapter = new MyAdapter(clinica, this);
         lvClinicas.setAdapter(adapter);
@@ -75,12 +85,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mostrarLoading(){
-        tvHello.setVisibility(View.GONE);
+        tvHello.setText(null);
         pbLoading.setVisibility(View.VISIBLE);
+        clearList();
+    }
+
+    public void clearList(){
+        lvClinicas.setAdapter(null);
     }
 
     public void esconderLoading(){
-        tvHello.setVisibility(View.GONE);
+        tvHello.setText(null);
         pbLoading.setVisibility(View.GONE);
     }
 
@@ -120,36 +135,12 @@ public class MainActivity extends AppCompatActivity {
             if (clinicas == null) {
                 tvHello.setText(R.string.not_found);
             } else {
-                tvHello.setText(null);
                 listaClinicas(clinicas);
             }
         }
     }
-/*
-    class BancoAsyncTask extends AsyncTask<Void, Void, Void>{
-        Context context;
 
-        BancoAsyncTask(Context context){
-            this.context = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids){
-            Clinica clinica = new Clinica();
-            clinica.setNome_fantasia("Bemol");
-            clinica.setRazao_social("Benchimol Ltda.");
-
-            ClinicaDataBase.getInstance(context).getDao().insert(clinica);
-            List<Clinica> clinicas = ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
-            for(Clinica c : clinicas){
-                Log.d(TAG, "-->"+ c.toString());
-            }
-
-            return null;
-        }
-    }*/
-
-    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Boolean> {
+    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Void> {
         @SuppressLint("StaticFieldLeak")
         Context context;
 
@@ -158,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Clinica... clinicas){
+        protected Void doInBackground(Clinica... clinicas){
             Clinica clinica = clinicas[0];
             if (clinica.getFavorite()){
                 ClinicaDataBase.getInstance(context).getDao().insert(clinica);
@@ -168,19 +159,33 @@ public class MainActivity extends AppCompatActivity {
                     ClinicaDataBase.getInstance(context).getDao().delete(c);
                 }
             }
-
-            List<Clinica> clinis = ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
-            for(Clinica c : clinis){
-                Log.d(TAG, "-->"+ c.toString());
-            }
-
             return null;
+        }
+    }
+
+    class GetFavoritesAsyncTask extends AsyncTask<Void, Void, List<Clinica>>{
+        Context context;
+
+        GetFavoritesAsyncTask(Context context){
+            this.context = context;
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
+        protected List<Clinica> doInBackground(Void... voids) {
+            return ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
+        }
 
-            super.onPostExecute(aBoolean);
+        @Override
+        protected void onPostExecute(List<Clinica> clinicas) {
+            if (clinicas.size() == 0) {
+                clearList();
+                tvHello.setText(R.string.without_favorite);
+            } else {
+                tvHello.setText(null);
+                listaClinicas(clinicas);
+            }
+
+            super.onPostExecute(clinicas);
         }
     }
 

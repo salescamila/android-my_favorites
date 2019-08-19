@@ -4,6 +4,8 @@ package com.example.android_my_favorites.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.example.android_my_favorites.MainActivity;
+
 @Entity
 public class Clinica {
 
