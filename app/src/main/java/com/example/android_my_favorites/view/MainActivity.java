@@ -1,8 +1,10 @@
-package com.example.android_my_favorites;
+package com.example.android_my_favorites.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,11 +12,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android_my_favorites.MyAdapter;
+import com.example.android_my_favorites.R;
 import com.example.android_my_favorites.dao.ClinicaDataBase;
 import com.example.android_my_favorites.model.Clinica;
 import com.google.gson.Gson;
@@ -39,15 +45,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(tvHello == null) {
-            tvHello = findViewById(R.id.tv_hello);
-        }
-        if (lvClinicas == null) {
-            lvClinicas = findViewById(R.id.lv_clinicas);
-        }
-        if(pbLoading == null) {
-            pbLoading = findViewById(R.id.pb_loading);
-        }
+        tvHello = findViewById(R.id.tv_hello);
+        lvClinicas = findViewById(R.id.lv_clinicas);
+        pbLoading = findViewById(R.id.pb_loading);
     }
 
     @Override
@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_favorites:
                 listAllFavoritesClinics();
                 break;
+            case R.id.menu_newact:
+                Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -80,9 +84,21 @@ public class MainActivity extends AppCompatActivity {
         task.execute();
     }
 
-    public ListView listaClinicas (List<Clinica> clinica) {
+    public ListView listaClinicas (final List<Clinica> clinica) {
+        Log.d(TAG, "entrou.....");
         MyAdapter adapter = new MyAdapter(clinica, this);
         lvClinicas.setAdapter(adapter);
+
+        lvClinicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "clicou no item...");
+                Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
+                intent.putExtra("clinica", (Parcelable) clinica.get(position));
+                startActivity(intent);
+            }
+        });
+        Log.d(TAG, "setou listener...");
         return lvClinicas;
     }
 
@@ -151,11 +167,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Void> {
+    public static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Void> {
         @SuppressLint("StaticFieldLeak")
         Context context;
 
-        SetFavoriteAsyncTask(Context context){
+        public SetFavoriteAsyncTask(Context context){
             this.context = context;
         }
 
@@ -195,18 +211,19 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 tvHello.setText(null);
                 listaClinicas(clinicas);
+                Log.d(TAG, "setar listener...");
             }
 
             super.onPostExecute(clinicas);
         }
     }
 
-    static class GetClinicAsyncTask extends AsyncTask<String, Void, List<Clinica>>{
+    public static class GetClinicAsyncTask extends AsyncTask<String, Void, List<Clinica>>{
         @SuppressLint("StaticFieldLeak")
         Context context;
         Integer position;
 
-        GetClinicAsyncTask(Context context, Integer position){
+        public GetClinicAsyncTask(Context context, Integer position){
             this.context = context;
             this.position = position;
         }

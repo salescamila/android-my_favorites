@@ -9,4 +9,10 @@
     <string name="not_found">Nada encontrado. Verifique sua internet.</string>
     <string name="without_favorite">Nenhuma clinica favoritada.</string>
     <string name="favorite">Favoritar</string>
+    <string name="descricao">Descrição: </string>
+    <string name="beneficios">Benefícios: </string>
+    <string name="segmentos">Segmentos: </string>
+    <string name="telefone">Telefone: </string>
+    <string name="endereco">Endereço: </string>
+    <string name="menu_activity">Nova janela</string>
 </resources>

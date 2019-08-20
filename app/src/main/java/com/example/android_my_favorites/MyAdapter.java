@@ -3,7 +3,7 @@ package com.example.android_my_favorites;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android_my_favorites.dao.ClinicaDataBase;
 import com.example.android_my_favorites.model.Clinica;
+import com.example.android_my_favorites.view.ClinicaInfo;
+import com.example.android_my_favorites.view.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -22,13 +23,14 @@ import java.util.List;
 
 import util.NetworkUtil;
 
+
 public class MyAdapter extends BaseAdapter {
 
     private List<Clinica> listClinicas;
     private Activity activity;
     final private String TAG = "MyAdapter";
 
-    MyAdapter(List<Clinica> list, Activity act){
+    public MyAdapter(List<Clinica> list, Activity act){
         this.listClinicas = list;
         this.activity = act;
     }
@@ -76,6 +78,7 @@ public class MyAdapter extends BaseAdapter {
         if (clinica.getFavorite()){
             ibStar.setImageDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_star_full));
         }
+
 
         // Evento para setar Clinica Favorita
         ibStar.setOnClickListener(new View.OnClickListener() {
