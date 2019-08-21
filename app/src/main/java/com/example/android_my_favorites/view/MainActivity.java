@@ -1,5 +1,6 @@
-package com.example.android_my_favorites;
+package com.example.android_my_favorites.view;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android_my_favorites.MyAdapter;
+import com.example.android_my_favorites.R;
 import com.example.android_my_favorites.model.Clinica;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_favorites:
                 //list favorites
+                break;
+            case R.id.menu_newact:
+                Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

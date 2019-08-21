@@ -22,7 +22,7 @@ public class MyAdapter extends BaseAdapter {
     private Activity activity;
 
 
-    MyAdapter(List<Clinica> list, Activity act){
+    public MyAdapter(List<Clinica> list, Activity act){
         this.listClinicas = list;
         this.activity = act;
     }

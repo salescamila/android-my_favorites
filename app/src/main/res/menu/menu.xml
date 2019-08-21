@@ -16,4 +16,8 @@
     <item
         android:id="@+id/menu_favorites"
         android:title="@string/menu_favorites" />
+
+    <item
+        android:id="@+id/menu_newact"
+        android:title="@string/menu_activity" />
 </menu>
