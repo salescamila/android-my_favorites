@@ -5,8 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
     <ImageView
         android:contentDescription="@string/logo"
         android:id="@+id/iv_clinica"
@@ -15,7 +13,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
-
     <TextView
         android:id="@+id/tv_clinica"
         android:layout_width="match_parent"
@@ -24,9 +21,8 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/nome_fantasia"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_clinica"
         app:layout_constraintTop_toTopOf="parent" />
-
 </android.support.v7.widget.LinearLayoutCompat>

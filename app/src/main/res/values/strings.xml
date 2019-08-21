@@ -7,11 +7,11 @@
     <string name="nome_fantasia">Nome Fantasia</string>
     <string name="logo">Logo</string>
     <string name="not_found">Nada encontrado.</string>
-    <string name="descricao">Descrição: </string>
-    <string name="beneficios">Benefícios: </string>
-    <string name="segmentos">Segmentos: </string>
-    <string name="telefone">Telefone: </string>
-    <string name="endereco">Endereço: </string>
+    <string name="descricao">Descrição: %1</string>
+    <string name="beneficios">Benefícios: %1</string>
+    <string name="segmentos">Segmentos: %1</string>
+    <string name="telefone">Telefone: %1</string>
+    <string name="endereco">Endereço: %1</string>
     <string name="menu_activity">Nova janela</string>
     <string name="favorite" />
 </resources>

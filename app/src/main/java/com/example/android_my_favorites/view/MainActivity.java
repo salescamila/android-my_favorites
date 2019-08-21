@@ -2,12 +2,14 @@ package com.example.android_my_favorites.view;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,11 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 listAllClinics();
                 break;
             case R.id.menu_favorites:
-                //list favorites
-                break;
-            case R.id.menu_newact:
-                Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
-                startActivity(intent);
+                //To-do: list favorites
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -69,33 +67,39 @@ public class MainActivity extends AppCompatActivity {
         task.execute(url);
     }
 
-    public ListView listaClinicas (List<Clinica> clinica) {
+    public ListView listaClinicas (final List<Clinica> clinica) {
         MyAdapter adapter = new MyAdapter(clinica, this);
         lvClinicas.setAdapter(adapter);
+
+        lvClinicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
+                Log.d(TAG, "id..."+id);
+                Log.d(TAG, "position..."+position);
+
+                intent.putExtra("clinica", clinica.get(position));
+                startActivity(intent);
+            }
+        });
+
         return lvClinicas;
     }
 
     public void mostrarLoading(){
-        Log.d(TAG, "MostrarLoading");
         tvHello.setVisibility(View.GONE);
-        Log.d(TAG, "Escondeu texto");
         pbLoading.setVisibility(View.VISIBLE);
-        Log.d(TAG, "Mostrou loading");
     }
 
     public void esconderLoading(){
-        Log.d(TAG, "EsconderLoading");
         tvHello.setVisibility(View.GONE);
-        Log.d(TAG, "Escondeu o texto");
         pbLoading.setVisibility(View.GONE);
-        Log.d(TAG, "Escondeu o loading");
     }
 
-    class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
+    private class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "onPreExecute");
             mostrarLoading();
             super.onPreExecute();
         }
