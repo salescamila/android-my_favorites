@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android_my_favorites.model.Clinica;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     TextView tvHello;
     ListView lvClinicas;
+    ProgressBar pbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tvHello = findViewById(R.id.tv_hello);
         lvClinicas = findViewById(R.id.lv_clinicas);
+        pbLoading = findViewById(R.id.pb_loading);
     }
 
     @Override
@@ -64,7 +68,30 @@ public class MainActivity extends AppCompatActivity {
         return lvClinicas;
     }
 
+    public void mostrarLoading(){
+        Log.d(TAG, "MostrarLoading");
+        tvHello.setVisibility(View.GONE);
+        Log.d(TAG, "Escondeu texto");
+        pbLoading.setVisibility(View.VISIBLE);
+        Log.d(TAG, "Mostrou loading");
+    }
+
+    public void esconderLoading(){
+        Log.d(TAG, "EsconderLoading");
+        tvHello.setVisibility(View.GONE);
+        Log.d(TAG, "Escondeu o texto");
+        pbLoading.setVisibility(View.GONE);
+        Log.d(TAG, "Escondeu o loading");
+    }
+
     class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(TAG, "onPreExecute");
+            mostrarLoading();
+            super.onPreExecute();
+        }
 
         @Override
         protected List<Clinica> doInBackground(URL... urls) {
@@ -88,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Clinica> clinicas){
+            esconderLoading();
             if (clinicas == null) {
                 tvHello.setText(R.string.not_found);
             } else {
