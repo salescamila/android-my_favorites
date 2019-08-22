@@ -40,7 +40,7 @@ public class NetworkUtil {
     }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
-        Log.d(TAG, "metodo getResponseFromHttpUrl");
+        //Log.d(TAG, "metodo getResponseFromHttpUrl");
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

@@ -13,5 +13,5 @@
     <string name="telefone">Telefone: </string>
     <string name="endereco">Endereço: </string>
     <string name="menu_activity">Nova janela</string>
-    <string name="favorite" />
+    <string name="favorite">Favoritar</string>
 </resources>

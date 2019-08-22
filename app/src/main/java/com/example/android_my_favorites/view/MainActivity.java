@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         tvHello = findViewById(R.id.tv_hello);
         lvClinicas = findViewById(R.id.lv_clinicas);
         pbLoading = findViewById(R.id.pb_loading);
-        new BancoAsyncTask(this).execute();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void listAllClinics(){
         URL url = NetworkUtil.buildUrlClinicas();
-        MyAsyncTask task = new MyAsyncTask();
+        CallWebAsyncTask task = new CallWebAsyncTask();
         task.execute(url);
     }
 
@@ -78,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ClinicaInfo.class);
-                Log.d(TAG, "id..."+id);
-                Log.d(TAG, "position..."+position);
-
                 intent.putExtra("clinica", clinica.get(position));
                 startActivity(intent);
             }
@@ -99,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         pbLoading.setVisibility(View.GONE);
     }
 
-    private class MyAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
+    private class CallWebAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
         protected void onPreExecute() {
@@ -111,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
         protected List<Clinica> doInBackground(URL... urls) {
             Object json="";
             URL url = urls[0];
-            Log.d(TAG, "URL utilizada: " + url.toString());
+            //Log.d(TAG, "URL utilizada: " + url.toString());
             try {
                 json = NetworkUtil.getResponseFromHttpUrl(url);
-                Log.d(TAG, "AsyncTask retornou: " + json);
+                //Log.d(TAG, "AsyncTask retornou: " + json);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,29 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 tvHello.setText(null);
                 listaClinicas(clinicas);
             }
-        }
-    }
-
-    class BancoAsyncTask extends AsyncTask<Void, Void, Void>{
-        Context context;
-
-        BancoAsyncTask(Context context){
-            this.context = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids){
-            Clinica clinica = new Clinica();
-            clinica.setNome_fantasia("Bemol");
-            clinica.setRazao_social("Benchimol Ltda.");
-
-            ClinicaDataBase.getInstance(context).getDao().insert(clinica);
-            List<Clinica> clinicas = ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
-            for(Clinica c : clinicas){
-                Log.d(TAG, "-->"+ c.toString());
-            }
-
-            return null;
         }
     }
 }

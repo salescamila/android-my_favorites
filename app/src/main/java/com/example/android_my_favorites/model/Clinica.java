@@ -35,12 +35,13 @@ public class Clinica implements Parcelable {
     private String segmento;
     private String beneficios;
     private String total_likes;
+    private Boolean favorite=false;
 
 
     public Clinica() {}
 
 
-    public Clinica(Parcel in) {
+    private Clinica(Parcel in) {
         descricao = in.readString();
         foto = in.readString();
         uniq_id = in.readString();
@@ -65,6 +66,7 @@ public class Clinica implements Parcelable {
         segmento = in.readString();
         beneficios = in.readString();
         total_likes = in.readString();
+        favorite = in.readInt() == 1;
     }
 
     public static final Creator<Clinica> CREATOR = new Creator<Clinica>() {
@@ -82,11 +84,10 @@ public class Clinica implements Parcelable {
     @Override
     public String toString() {
         return "Credenciadas{" +
-                "descricao='" + descricao + '\'' +
                 ", id='" + id + '\'' +
                 ", uniq_id='" + uniq_id + '\'' +
-                ", razao_social='" + razao_social + '\'' +
                 ", nome_fantasia='" + nome_fantasia + '\'' +
+                ", favorita='" + favorite + '\'' +
                 '}';
     }
 
@@ -284,6 +285,16 @@ public class Clinica implements Parcelable {
         this.total_likes = total_likes;
     }
 
+    public Boolean getFavorite() { return this.favorite; }
+
+    public void setFavorite() {
+        setFavorite(false);
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = !this.favorite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -315,5 +326,6 @@ public class Clinica implements Parcelable {
         dest.writeString(segmento);
         dest.writeString(beneficios);
         dest.writeString(total_likes);
+        dest.writeInt(favorite ? 1 : 0);
     }
 }
