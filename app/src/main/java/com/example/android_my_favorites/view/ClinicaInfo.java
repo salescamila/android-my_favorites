@@ -102,7 +102,7 @@ public class ClinicaInfo extends AppCompatActivity {
                 .into(iv_foto);
     }
 
-    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Boolean> {
+    static class SetFavoriteAsyncTask extends AsyncTask<Clinica, Void, Void> {
         @SuppressLint("StaticFieldLeak")
         Context context;
 
@@ -111,7 +111,7 @@ public class ClinicaInfo extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Clinica... clinicas){
+        protected Void doInBackground(Clinica... clinicas){
             Clinica clinica = clinicas[0];
             if (clinica.getFavorite()){
                 ClinicaDataBase.getInstance(context).getDao().insert(clinica);
@@ -129,14 +129,9 @@ public class ClinicaInfo extends AppCompatActivity {
 
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-
-            super.onPostExecute(aBoolean);
-        }
     }
 
+    @SuppressLint("StaticFieldLeak")
     class GetClinicAsyncTask extends AsyncTask<String, Void, List<Clinica>>{
         @SuppressLint("StaticFieldLeak")
         Context context;

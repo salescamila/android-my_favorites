@@ -6,7 +6,8 @@
     <string name="welcome">Bem vindo!</string>
     <string name="nome_fantasia">Nome Fantasia</string>
     <string name="logo">Logo</string>
-    <string name="not_found">Nada encontrado.</string>
+    <string name="not_found">Nada encontrado. Verifique sua internet.</string>
+    <string name="without_favorite">Nenhuma clinica favoritada.</string>
     <string name="descricao">Descrição: </string>
     <string name="beneficios">Benefícios: </string>
     <string name="segmentos">Segmentos: </string>

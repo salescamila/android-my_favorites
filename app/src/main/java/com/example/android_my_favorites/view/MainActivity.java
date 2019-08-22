@@ -1,5 +1,6 @@
 package com.example.android_my_favorites.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 listAllClinics();
                 break;
             case R.id.menu_favorites:
-                //To-do: list favorites
+                listAllFavoritesClinics();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -67,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         URL url = NetworkUtil.buildUrlClinicas();
         CallWebAsyncTask task = new CallWebAsyncTask();
         task.execute(url);
+    }
+
+    public void listAllFavoritesClinics(){
+        GetAllFavoritesAsyncTask task = new GetAllFavoritesAsyncTask(this);
+        task.execute();
     }
 
     public ListView listaClinicas (final List<Clinica> clinica) {
@@ -85,16 +91,22 @@ public class MainActivity extends AppCompatActivity {
         return lvClinicas;
     }
 
+    public void clearList(){
+        lvClinicas.setAdapter(null);
+    }
+
     public void mostrarLoading(){
-        tvHello.setVisibility(View.GONE);
+        tvHello.setText(null);
         pbLoading.setVisibility(View.VISIBLE);
+        clearList();
     }
 
     public void esconderLoading(){
-        tvHello.setVisibility(View.GONE);
+        tvHello.setText(null);
         pbLoading.setVisibility(View.GONE);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CallWebAsyncTask extends AsyncTask<URL, Void, List<Clinica>> {
 
         @Override
@@ -129,9 +141,36 @@ public class MainActivity extends AppCompatActivity {
             if (clinicas == null) {
                 tvHello.setText(R.string.not_found);
             } else {
-                tvHello.setText(null);
                 listaClinicas(clinicas);
             }
         }
     }
+
+    @SuppressLint("StaticFieldLeak")
+    class GetAllFavoritesAsyncTask extends AsyncTask<Void, Void, List<Clinica>>{
+        Context context;
+
+        GetAllFavoritesAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected List<Clinica> doInBackground(Void... voids) {
+            return ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
+        }
+
+        @Override
+        protected void onPostExecute(List<Clinica> clinicas) {
+            if (clinicas.size() == 0) {
+                clearList();
+                tvHello.setText(R.string.without_favorite);
+            } else {
+                tvHello.setText(null);
+                listaClinicas(clinicas);
+            }
+
+            super.onPostExecute(clinicas);
+        }
+    }
+
 }
