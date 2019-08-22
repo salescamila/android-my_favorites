@@ -37,10 +37,10 @@ public class Clinica implements Parcelable {
     private String total_likes;
 
 
-    //public Clinica() {}
+    public Clinica() {}
 
 
-    private Clinica(Parcel in) {
+    public Clinica(Parcel in) {
         descricao = in.readString();
         foto = in.readString();
         uniq_id = in.readString();
@@ -84,11 +84,9 @@ public class Clinica implements Parcelable {
         return "Credenciadas{" +
                 "descricao='" + descricao + '\'' +
                 ", id='" + id + '\'' +
-                ", id_estabelecimento='" + id_estabelecimento + '\'' +
+                ", uniq_id='" + uniq_id + '\'' +
                 ", razao_social='" + razao_social + '\'' +
                 ", nome_fantasia='" + nome_fantasia + '\'' +
-                ", contato='" + contato + '\'' +
-                ", telefone='" + telefone + '\'' +
                 '}';
     }
 
@@ -224,9 +222,7 @@ public class Clinica implements Parcelable {
         this.id_estado = id_estado;
     }
 
-    public String getCep() {
-        return cep;
-    }
+    public String getCep() { return cep; }
 
     public void setCep(String cep) {
         this.cep = cep;

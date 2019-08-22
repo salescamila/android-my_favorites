@@ -1,5 +1,6 @@
 package com.example.android_my_favorites.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Parcelable;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.android_my_favorites.MyAdapter;
 import com.example.android_my_favorites.R;
+import com.example.android_my_favorites.dao.ClinicaDataBase;
 import com.example.android_my_favorites.model.Clinica;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,7 +30,7 @@ import util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainCAMILA";
     TextView tvHello;
     ListView lvClinicas;
     ProgressBar pbLoading;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tvHello = findViewById(R.id.tv_hello);
         lvClinicas = findViewById(R.id.lv_clinicas);
         pbLoading = findViewById(R.id.pb_loading);
+        new BancoAsyncTask(this).execute();
     }
 
     @Override
@@ -133,6 +136,29 @@ public class MainActivity extends AppCompatActivity {
                 tvHello.setText(null);
                 listaClinicas(clinicas);
             }
+        }
+    }
+
+    class BancoAsyncTask extends AsyncTask<Void, Void, Void>{
+        Context context;
+
+        BancoAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids){
+            Clinica clinica = new Clinica();
+            clinica.setNome_fantasia("Bemol");
+            clinica.setRazao_social("Benchimol Ltda.");
+
+            ClinicaDataBase.getInstance(context).getDao().insert(clinica);
+            List<Clinica> clinicas = ClinicaDataBase.getInstance(context).getDao().getAllClinicas();
+            for(Clinica c : clinicas){
+                Log.d(TAG, "-->"+ c.toString());
+            }
+
+            return null;
         }
     }
 }
